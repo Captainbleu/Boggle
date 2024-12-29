@@ -1,0 +1,185 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Application/1.0.0": {
+        "dependencies": {
+          "ConsoleAppVisuals": "3.5.4",
+          "KnowledgePicker.WordCloud": "1.3.2",
+          "System.Drawing.Common": "9.0.0"
+        },
+        "runtime": {
+          "Application.dll": {}
+        }
+      },
+      "ConsoleAppVisuals/3.5.4": {
+        "dependencies": {
+          "YamlDotNet": "16.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/ConsoleAppVisuals.dll": {
+            "assemblyVersion": "3.5.4.0",
+            "fileVersion": "3.5.4.0"
+          }
+        }
+      },
+      "KnowledgePicker.WordCloud/1.3.2": {
+        "dependencies": {
+          "SkiaSharp": "3.116.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/KnowledgePicker.WordCloud.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Microsoft.Win32.SystemEvents/9.0.0": {
+        "runtime": {
+          "lib/net9.0/Microsoft.Win32.SystemEvents.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net9.0/Microsoft.Win32.SystemEvents.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "SkiaSharp/3.116.0": {
+        "dependencies": {
+          "SkiaSharp.NativeAssets.Win32": "3.116.0",
+          "SkiaSharp.NativeAssets.macOS": "3.116.0"
+        },
+        "runtime": {
+          "lib/net8.0/SkiaSharp.dll": {
+            "assemblyVersion": "3.116.0.0",
+            "fileVersion": "3.116.0.0"
+          }
+        }
+      },
+      "SkiaSharp.NativeAssets.macOS/3.116.0": {
+        "runtimeTargets": {
+          "runtimes/osx/native/libSkiaSharp.dylib": {
+            "rid": "osx",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "SkiaSharp.NativeAssets.Win32/3.116.0": {
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/libSkiaSharp.dll": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libSkiaSharp.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/libSkiaSharp.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "System.Drawing.Common/9.0.0": {
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "9.0.0"
+        },
+        "runtime": {
+          "lib/net9.0/System.Drawing.Common.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52901"
+          },
+          "lib/net9.0/System.Private.Windows.Core.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52901"
+          }
+        }
+      },
+      "YamlDotNet/16.0.0": {
+        "runtime": {
+          "lib/net8.0/YamlDotNet.dll": {
+            "assemblyVersion": "16.0.0.0",
+            "fileVersion": "16.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ConsoleAppVisuals/3.5.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uKbIe/AZTzFouH8FmIl4vYVKmBpLxmMG85A5EZ1eMZwrY5OuqZ5Lmk/j1gUnSyl3shEhB5ojK6sLWh2EbDXsMQ==",
+      "path": "consoleappvisuals/3.5.4",
+      "hashPath": "consoleappvisuals.3.5.4.nupkg.sha512"
+    },
+    "KnowledgePicker.WordCloud/1.3.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wvYt2DOczcK2g4FbFAVzNuzjGOeLPRlij7Cb3+M+BrqIITc4OZ/hm/nGesMUoPvemSvsro3HgnjOel5q7F395Q==",
+      "path": "knowledgepicker.wordcloud/1.3.2",
+      "hashPath": "knowledgepicker.wordcloud.1.3.2.nupkg.sha512"
+    },
+    "Microsoft.Win32.SystemEvents/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z8FfGIaoeALdD+KF44A2uP8PZIQQtDGiXsOLuN8nohbKhkyKt7zGaZb+fKiCxTuBqG22Q7myIAioSWaIcOOrOw==",
+      "path": "microsoft.win32.systemevents/9.0.0",
+      "hashPath": "microsoft.win32.systemevents.9.0.0.nupkg.sha512"
+    },
+    "SkiaSharp/3.116.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HvLQXua/TWp7eYWaY3R69b4Tm8AdedfXkKHY3MIgjYFNoQqwPfOd7/u1Bqs8WiBoSa2ISjqUnqzitpihlkvFfQ==",
+      "path": "skiasharp/3.116.0",
+      "hashPath": "skiasharp.3.116.0.nupkg.sha512"
+    },
+    "SkiaSharp.NativeAssets.macOS/3.116.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-k98/ZVE7U2omT/NtPiSwRGG9NbqfRA35L89/NqR6G0MVLuedR7Vi25NIxaYr/ExZyORUAq7Gtd3XOgGQvZTAPw==",
+      "path": "skiasharp.nativeassets.macos/3.116.0",
+      "hashPath": "skiasharp.nativeassets.macos.3.116.0.nupkg.sha512"
+    },
+    "SkiaSharp.NativeAssets.Win32/3.116.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0uYDLypyfKGfzW/pfRcDNBTMXYKLwF3IUqL0RBF1hyi63ghFxFNr2q4o/00lhxwvKj34rP3RHekY4CA2c8i9LA==",
+      "path": "skiasharp.nativeassets.win32/3.116.0",
+      "hashPath": "skiasharp.nativeassets.win32.3.116.0.nupkg.sha512"
+    },
+    "System.Drawing.Common/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uoozjI3+dlgKh2onFJcz8aNLh6TRCPlLSh8Dbuljc8CdvqXrxHOVysJlrHvlsOCqceqGBR1wrMPxlnzzhynktw==",
+      "path": "system.drawing.common/9.0.0",
+      "hashPath": "system.drawing.common.9.0.0.nupkg.sha512"
+    },
+    "YamlDotNet/16.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kZ4jR5ltFhnjaUqK9x81zXRIUTH4PTXTTEmJDNQdkDLQhcv+2Nl19r0dCSvPW1mstOYBfXTnjdieRbUO6gHMDw==",
+      "path": "yamldotnet/16.0.0",
+      "hashPath": "yamldotnet.16.0.0.nupkg.sha512"
+    }
+  }
+}

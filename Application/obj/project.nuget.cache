@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "FDLt4YRpMi4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\eliot\\RiderProjects\\Boggle\\Application\\Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\eliot\\.nuget\\packages\\consoleappvisuals\\3.5.4\\consoleappvisuals.3.5.4.nupkg.sha512",
+    "C:\\Users\\eliot\\.nuget\\packages\\knowledgepicker.wordcloud\\1.3.2\\knowledgepicker.wordcloud.1.3.2.nupkg.sha512",
+    "C:\\Users\\eliot\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.0\\microsoft.win32.systemevents.9.0.0.nupkg.sha512",
+    "C:\\Users\\eliot\\.nuget\\packages\\skiasharp\\3.116.0\\skiasharp.3.116.0.nupkg.sha512",
+    "C:\\Users\\eliot\\.nuget\\packages\\skiasharp.nativeassets.macos\\3.116.0\\skiasharp.nativeassets.macos.3.116.0.nupkg.sha512",
+    "C:\\Users\\eliot\\.nuget\\packages\\skiasharp.nativeassets.win32\\3.116.0\\skiasharp.nativeassets.win32.3.116.0.nupkg.sha512",
+    "C:\\Users\\eliot\\.nuget\\packages\\system.drawing.common\\9.0.0\\system.drawing.common.9.0.0.nupkg.sha512",
+    "C:\\Users\\eliot\\.nuget\\packages\\yamldotnet\\16.0.0\\yamldotnet.16.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
