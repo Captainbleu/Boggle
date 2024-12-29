@@ -24,6 +24,7 @@ public static class Board
     {
         InitializeMatrix(size);
         UpdateMaxOccurrences(size);
+        Launch();
     }
 
     /// <summary>
@@ -136,16 +137,33 @@ public static class Board
     /// </summary>
     /// <param name="word">Word to check.</param>
     /// <returns><c>true</c> if the word is valid, otherwise <c>false</c>.</returns>
-    public static bool TestWord(string word)
+    public static bool TestWord(string word, out string message)
     {
         word = CleanWord(word);
 
-        if (!IsWordLongEnough(word)) return false;
-        if (!IsWordNotFound(word)) return false;
-        if (!IsWordInBoard(word)) return false;
-        if (!IsWordInDictionary(word)) return false;
+        if (!IsWordLongEnough(word))
+        {
+            message = "The word must be at least two letters long.";
+            return false;
+        }
+        if (!IsWordNotFound(word))
+        {
+            message = "The word has already been found.";
+            return false;
+        }
+        if (!IsWordInBoard(word))
+        {
+            message = "The word is not in the board.";
+            return false;
+        }
+        if (!IsWordInDictionary(word))
+        {
+            message = "The word is not in the dictionary.";
+            return false;
+        }
 
         foundWords.Add(word);
+        message = "Word accepted!";
         return true;
     }
 
@@ -164,7 +182,6 @@ public static class Board
     {
         if (word.Length < 2)
         {
-            Console.WriteLine("The word must be at least two letters long.");
             return false;
         }
         return true;
@@ -177,7 +194,6 @@ public static class Board
     {
         if (foundWords.Contains(word))
         {
-            Console.WriteLine("The word has already been found.");
             return false;
         }
         return true;
@@ -190,7 +206,6 @@ public static class Board
     {
         if (!Contains(word))
         {
-            Console.WriteLine("The word is not in the board.");
             return false;
         }
         return true;
@@ -203,7 +218,6 @@ public static class Board
     {
         if (!CustomDictionary.Contains(word))
         {
-            Console.WriteLine("The word is not in the dictionary.");
             return false;
         }
         return true;
@@ -312,7 +326,7 @@ public static class Board
     /// Returns the visible faces of the board as a string.
     /// </summary>
     /// <returns>string of the visible faces of the board</returns>
-    public static string ToString()
+    public static string toString()
     {
         string str = "";
         int size = board.GetLength(0);
@@ -328,6 +342,28 @@ public static class Board
         }
 
         return str.TrimEnd();
+    }
+
+    /// <summary>
+    /// Returns the visible faces of the board as a list of lists of characters.
+    /// </summary>
+    /// <returns>list of lists of the visible faces of the board</returns>
+    public static List<List<char>> ToCharList()
+    {
+        int size = board.GetLength(0);
+        List<List<char>> list = new();
+
+        for (int i = 0; i < size; i++)
+        {
+            List<char> row = new();
+            for (int j = 0; j < size; j++)
+            {
+                row.Add(board[i, j].VisibleFace);
+            }
+            list.Add(row);
+        }
+
+        return list;
     }
 
     #endregion Display
