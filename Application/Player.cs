@@ -1,13 +1,20 @@
 ﻿namespace Boggle;
 
 /// <summary>
-/// Represents a player in the Boggle game.
+/// Represents a player in the game.
 /// </summary>
 public class Player
 {
     #region Fields
 
+    /// <summary>
+    /// Name of the player.
+    /// </summary>
     private string name;
+
+    /// <summary>
+    /// Score of the player.
+    /// </summary>
     private int score;
 
     /// <summary>
@@ -30,7 +37,7 @@ public class Player
     /// <remarks>
     /// Initialized at the beginning of the game, their <c>score</c> is initially zero and their list of <c>words</c> found is empty.
     /// </remarks>
-    /// <param name="name">Unique name of the player.</param>
+    /// <param name="name">Name of the player.</param>
     public Player(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -59,7 +66,7 @@ public class Player
     #region Properties
 
     /// <summary>
-    /// Gets the player's name.
+    /// Gets the name of the player.
     /// </summary>
     public string Name
     {
@@ -67,7 +74,7 @@ public class Player
     }
 
     /// <summary>
-    /// Gets or sets the player's score.
+    /// Gets the score of the player.
     /// </summary>
     public int Score
     {
@@ -117,12 +124,7 @@ public class Player
             words[word]++;
         }
 
-        foreach (char letter in word)
-        {
-            score += Language.PointsPerLetter[letter];
-        }
-
-        score += word.Length * (int)Math.Ceiling(Math.Log2(word.Length));
+        this.score += Language.CalculateScore(word);
     }
 
     /// <summary>

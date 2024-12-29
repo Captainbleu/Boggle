@@ -136,6 +136,7 @@ public static class Board
     /// Checks if a word is valid and if so, adds it to the list of found words.
     /// </summary>
     /// <param name="word">Word to check.</param>
+    /// <param name="message">Message to display to the user.</param>
     /// <returns><c>true</c> if the word is valid, otherwise <c>false</c>.</returns>
     public static bool TestWord(string word, out string message)
     {

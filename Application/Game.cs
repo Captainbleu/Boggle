@@ -4,9 +4,6 @@ using ConsoleAppVisuals.InteractiveElements;
 using ConsoleAppVisuals.AnimatedElements;
 using ConsoleAppVisuals.PassiveElements;
 using ConsoleAppVisuals.Enums;
-using ConsoleAppVisuals.Models;
-using ConsoleAppVisuals.Errors;
-using ConsoleAppVisuals.Attributes;
 
 namespace Boggle;
 
@@ -20,7 +17,7 @@ public static class Game
     /// <summary>
     /// Stopwatch for a player's turn.
     /// </summary>
-    private static Stopwatch PlayerStopwatch = new Stopwatch();
+    private static Stopwatch playerStopwatch = new Stopwatch();
 
     /// <summary>
     /// Time for a turn in milliseconds.
@@ -69,13 +66,9 @@ public static class Game
     public static void Main()
     {
         InitializeUI();
-
         DisplayInstructions();
-
         InitializeGame();
-
         GameLoop();
-
         EndGame();
     }
 
@@ -91,11 +84,11 @@ public static class Game
         Window.Open();
 
         Title title = new Title("Boggle");
-        Header header = new Header("By Eliott ROUSSILLE and François TEYNIER", 
-                                "POO Project 2024-2025", 
+        Header header = new Header("By Eliott ROUSSILLE and François TEYNIER",
+                                "POO Project 2024-2025",
                                 "TD E");
-        Footer footer = new Footer("[ESC] Quit", 
-                                "[Z | \u2191] Up, [S | \u2193] Down", 
+        Footer footer = new Footer("[ESC] Quit",
+                                "[Z | \u2191] Up, [S | \u2193] Down",
                                 "[ENTER] Select");
 
         Window.AddElement(title, header, footer);
@@ -124,14 +117,14 @@ public static class Game
     /// </summary>
     private static void InitializeLanguage()
     {
-        ScrollingMenu langageMenu = new ScrollingMenu(
+        ScrollingMenu languageMenu = new ScrollingMenu(
             "Choose the game language:",
             choices:["French", "English"]
         );
-        Window.AddElement(langageMenu);
-        Window.ActivateElement(langageMenu);
+        Window.AddElement(languageMenu);
+        Window.ActivateElement(languageMenu);
 
-        var response = langageMenu.GetResponse();
+        var response = languageMenu.GetResponse();
         switch (response?.Status)
         {
             case Status.Selected:
@@ -150,7 +143,7 @@ public static class Game
                 break;
         }
 
-        Window.RemoveElement(langageMenu);
+        Window.RemoveElement(languageMenu);
         Window.Render();
     }
 
@@ -297,9 +290,8 @@ public static class Game
         {
             scores.Add("Player " + player.Name + ": " + player.Score + " points");
         }
-        
+
         scoreText.UpdateLines(scores);
-        //Window.AddElement(scoreText);
         Window.Render();
     }
 
@@ -322,7 +314,7 @@ public static class Game
     private static void DisplayFinalScores()
     {
         Window.RemoveElement(scoreText);
-        
+
         List<string> finalScores = new List<string>{"Final scores:"};
         int max = Int32.MinValue;
         string winner = "";
@@ -335,8 +327,8 @@ public static class Game
                 winner = player.Name;
             }
         }
-        
-        finalScores.Add("Felicitations to the winner: " + winner + " with " + max + " points!");
+
+        finalScores.Add("Congratulations to the winner: " + winner + " with " + max + " points!");
         EmbedText finalScoreText = new EmbedText(finalScores);
         Window.AddElement(finalScoreText);
         Window.Render();
@@ -347,12 +339,16 @@ public static class Game
     /// </summary>
     private static void DisplayWordCloud()
     {
+        List<string> wordCloudsText = new List<string>();
         foreach (Player player in playerList)
         {
-            Console.WriteLine(player.Name + ":");
             WordCloud.GenerateWordCloud(player.Words, player.Name);
-            Console.WriteLine("Word cloud downloaded!");
+            wordCloudsText.Add(player.Name + ": Word cloud downloaded!");
         }
+
+        EmbedText wordClouds = new EmbedText(wordCloudsText);
+        Window.AddElement(wordClouds);
+        Window.Render();
     }
 
     /// <summary>
@@ -402,10 +398,10 @@ public static class Game
         Window.AddElement(board);
         Window.Render();
 
-        PlayerStopwatch.Restart();
+        playerStopwatch.Restart();
 
         string message;
-        while (IsTimeInTurnInterval(PlayerStopwatch.ElapsedMilliseconds))
+        while (IsTimeInTurnInterval(playerStopwatch.ElapsedMilliseconds))
         {
             Prompt wordInput = new Prompt("Find a word:");
             Window.AddElement(wordInput);
@@ -421,12 +417,12 @@ public static class Game
                     break;
                 }
 
-                if (Board.TestWord(testWord.Value, out message) && IsTimeInTurnInterval(PlayerStopwatch.ElapsedMilliseconds))
+                if (Board.TestWord(testWord.Value, out message) && IsTimeInTurnInterval(playerStopwatch.ElapsedMilliseconds))
                 {
                     player.AddWord(testWord.Value);
                     DisplayScores();
                 }
-                
+
                 Text wordMessage = new Text(new List<string>{message});
                 Window.AddElement(wordMessage);
                 Window.Render();
@@ -436,7 +432,7 @@ public static class Game
             }
         }
 
-        PlayerStopwatch.Stop();
+        playerStopwatch.Stop();
 
         Window.RemoveElement(board);
         Window.RemoveElement(playerTurn);
@@ -445,7 +441,7 @@ public static class Game
         EmbedText playerTurnEnd = new EmbedText(new List<string>{"Time's up! End of " + player.Name + "'s turn!"});
         Window.AddElement(playerTurnEnd);
         Window.Render();
-        
+
         FakeLoadingBar fakeLoadingBar = new FakeLoadingBar(processDuration:2000, additionalDuration:1000);
         Window.AddElement(fakeLoadingBar);
         Window.ActivateElement(fakeLoadingBar);

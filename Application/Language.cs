@@ -175,5 +175,23 @@ public static class Language
         }
     }
 
+    /// <summary>
+    /// Calculates the score for a given word.
+    /// </summary>
+    /// <param name="word">Word to calculate the score for.</param>
+    /// <returns>Score of the word.</returns>
+    public static int CalculateScore(string word)
+    {
+        int wordScore = 0;
+        foreach (char letter in word)
+        {
+            wordScore += PointsPerLetter[letter];
+        }
+
+        wordScore += word.Length * (int)Math.Ceiling(Math.Log2(word.Length));
+
+        return wordScore;
+    }
+
     #endregion Methods
 }
