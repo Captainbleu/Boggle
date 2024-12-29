@@ -342,7 +342,7 @@ public static class Game
         List<string> wordCloudsText = new List<string>();
         foreach (Player player in playerList)
         {
-            WordCloud.GenerateWordCloud(player.Words, player.Name);
+            WordCloud.GenerateWordCloud(player.FoundWords, player.Name);
             wordCloudsText.Add(player.Name + ": Word cloud downloaded!");
         }
 

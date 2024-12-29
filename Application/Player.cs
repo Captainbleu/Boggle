@@ -24,7 +24,7 @@ public class Player
     /// <item>Value: the number of occurrences of the word.</item>
     /// </list>
     /// </summary>
-    private readonly Dictionary<string, int> words;
+    private readonly Dictionary<string, int> foundWords;
 
     #endregion Fields
 
@@ -58,7 +58,7 @@ public class Player
 
         this.name = cleanedName;
         this.score = 0;
-        this.words = new Dictionary<string, int>();
+        this.foundWords = new Dictionary<string, int>();
     }
 
     #endregion Constructors
@@ -84,9 +84,9 @@ public class Player
     /// <summary>
     /// Gets the list of words found by the player along with their occurrences.
     /// </summary>
-    public Dictionary<string, int> Words
+    public Dictionary<string, int> FoundWords
     {
-        get { return this.words; }
+        get { return this.foundWords; }
     }
 
     #endregion Properties
@@ -100,7 +100,7 @@ public class Player
     /// <returns><c>true</c> if the word has already been found, otherwise <c>false</c>.</returns>
     public bool Contains(string word)
     {
-        return this.words.ContainsKey(word);
+        return this.foundWords.ContainsKey(word);
     }
 
     /// <summary>
@@ -115,13 +115,13 @@ public class Player
     /// Then increments the player's score based on the length of the word and the value of each letter.
     /// </remarks>
     /// <param name="word">Word to add.</param>
-    /// <seealso cref="words"/>
+    /// <seealso cref="foundWords"/>
     public void AddWord(string word)
     {
         word = word.ToUpper();
-        if (!this.words.TryAdd(word, 1))
+        if (!this.foundWords.TryAdd(word, 1))
         {
-            words[word]++;
+            foundWords[word]++;
         }
 
         this.score += Language.CalculateScore(word);
@@ -133,7 +133,7 @@ public class Player
     /// <returns>Description of the player by their name, score, and number of words found.</returns>
     public override string ToString()
     {
-        return "Player: " + this.name + ", Score: " + this.score + ", Number of words found: " + this.words.Count + ".";
+        return "Player: " + this.name + ", Score: " + this.score + ", Number of words found: " + this.foundWords.Count + ".";
     }
 
     /// <summary>
