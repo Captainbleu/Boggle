@@ -1,0 +1,125 @@
+@startuml
+
+namespace Boggle {
+    class Die {
+        - char[] faces
+        - char visibleFace
+        + Die(Random random)
+        + char VisibleFace { get; }
+        + int Points { get; }
+        + void Roll(Random random)
+        + string ToString()
+    }
+
+    class Game {
+        - static Stopwatch playerStopwatch
+        - static int turnTime
+        - static int totalTurns
+        - static List<Player> playerList
+        - static int boardSize
+        - static EmbedText scoreText
+        + static List<Player> PlayerList { get; }
+        + static void Main()
+        - static void InitializeUI()
+        - static void InitializeGame()
+        - static void InitializeLanguage()
+        - static void InitializeBoard()
+        - static void InitializeGameParameters()
+        - static void InitializePlayers()
+        - static void DisplayInstructions()
+        - static void DisplayScores()
+        - static void EndGame()
+        - static void DisplayFinalScores()
+        - static void DisplayWordCloud()
+        - static void WaitBeforeClose()
+        - static void GameLoop()
+        - static void PlayerLoop(Player player)
+        - static bool IsTimeInTurnInterval(long time)
+    }
+
+    class Board {
+        - static Random r
+        - static Die[,] board
+        - static List<string> foundWords
+        + static void Initialize(int size)
+        - static void InitializeMatrix(int size)
+        - static void UpdateMaxOccurrences(int size)
+        + static void Launch()
+        - static void FillBoardWithConstraints(SortedList<char, int> occurrenceCounter)
+        - static void GenerateValidFaceForCell(int x, int y, SortedList<char, int> occurrenceCounter)
+        + static bool TestWord(string word, out string message)
+        - static string CleanWord(string word)
+        - static bool IsWordLongEnough(string word)
+        - static bool IsWordNotFound(string word)
+        - static bool IsWordInBoard(string word)
+        - static bool IsWordInDictionary(string word)
+        + static bool Contains(string word)
+        - static bool SearchWord(string word, int index, int x, int y, bool[,] visited)
+        - static bool DoesNextLetterMatch(string word, int index, int x, int y, int dx, int dy, bool[,] visited)
+        - static bool AreCoordinatesValid(int x, int y)
+        + static string toString()
+        + static List<List<char>> ToCharList()
+    }
+
+    class Language {
+        - static string languageCode
+        - static SortedList<char, int> pointsPerLetter
+        - static SortedList<char, int> maxOccurrencesPerLetter
+        - static char[] letterProbabilities
+        + static void Initialize(string language)
+        + static string LanguageCode { get; }
+        + static SortedList<char, int> MaxOccurrences { get; set; }
+        + static SortedList<char, int> PointsPerLetter { get; }
+        + static char GetLetterByProbability(int probability)
+        - static void FindLanguageCode(string language)
+        - static void InitializeDataStructures()
+        - static void ReadFile()
+        + static int CalculateScore(string word)
+    }
+
+    class WordCloud {
+        + static void GenerateWordCloud(Dictionary<string, int> words, string name)
+    }
+
+    class CustomDictionary {
+        - static SortedDictionary<int, string[]> wordsByLength
+        - static SortedDictionary<char, string[]> wordsByLetter
+        - static SortedDictionary<int, int> wordCountByLength
+        - static SortedDictionary<char, int> wordCountByLetter
+        + static void Initialize()
+        - static void ClearDataStructures()
+        - static void LoadWordsFromFile(SortedDictionary<int, List<string>> tempWordsByLength, SortedDictionary<char, List<string>> tempWordsByLetter)
+        - static void AddWordToStructures(string word, SortedDictionary<int, List<string>> tempWordsByLength, SortedDictionary<char, List<string>> tempWordsByLetter)
+        - static void ConvertListsToArrays(SortedDictionary<int, List<string>> tempWordsByLength, SortedDictionary<char, List<string>> tempWordsByLetter)
+        - static void SortLists()
+        + static bool Contains(string word)
+        - static bool BinarySearch(string[] array, string word, int start, int end)
+        + static void QuickSort(string[] array, int start, int end)
+        - static int Partition(string[] array, int start, int end, int pivot)
+    }
+
+    class Player {
+        - string name
+        - int score
+        - Dictionary<string, int> foundWords
+        + Player(string name)
+        + string Name { get; }
+        + int Score { get; }
+        + Dictionary<string, int> FoundWords { get; }
+        + bool Contains(string word)
+        + void AddWord(string word)
+        + string ToString()
+        - static bool DoesPlayerNameExist(string name)
+    }
+    
+     Game "1" *-- "2..*" Player
+     Game "1" *-- "1" Board
+     Language "1" ..> "1" Board
+     Game "1" *-- "1" CustomDictionary
+     Language "1" ..> "1" CustomDictionary
+     Language "1" ..> "1" Die
+     Board "1" *-- "1..*" Die
+     Player "1" *-- "1" WordCloud
+}
+
+@enduml
