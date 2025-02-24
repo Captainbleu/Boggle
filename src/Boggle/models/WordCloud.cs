@@ -6,7 +6,7 @@ using KnowledgePicker.WordCloud.Primitives;
 using KnowledgePicker.WordCloud.Sizers;
 using SkiaSharp;
 
-namespace Boggle.models;
+namespace Boggle.Models;
 
 /// <summary>
 /// Manages all aspects of the word cloud.

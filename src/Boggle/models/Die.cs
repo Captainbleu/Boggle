@@ -1,4 +1,4 @@
-﻿namespace Boggle;
+﻿namespace Boggle.Models;
 
 /// <summary>
 /// Represents a letter die.

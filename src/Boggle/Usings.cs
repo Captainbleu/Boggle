@@ -1,2 +1,2 @@
-global using Boggle.models;
+global using Boggle.Models;
 global using System.Text;

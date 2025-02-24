@@ -1,4 +1,4 @@
-﻿namespace Boggle.models;
+﻿namespace Boggle.Models;
 
 /// <summary>
 /// Represents a dictionary of words for a given language.

@@ -1,4 +1,4 @@
-﻿namespace Boggle.models;
+﻿namespace Boggle.Models;
 
 /// <summary>
 /// Represents a matrix of <see cref="Die"/>.

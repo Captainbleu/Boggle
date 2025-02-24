@@ -1,4 +1,4 @@
-namespace Boggle.models;
+namespace Boggle.Models;
 
 /// <summary>
 /// Stores information related to the language.
