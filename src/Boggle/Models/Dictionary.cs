@@ -15,7 +15,7 @@ public static class CustomDictionary
     /// <item>Value: words of that length.</item>
     /// </list>
     /// </summary>
-    private static readonly SortedDictionary<int, string[]> _wordsByLength = new();
+    private static readonly SortedDictionary<int, string[]> _wordsByLength = [];
 
     /// <summary>
     /// List of words sorted by first letter.
@@ -24,7 +24,7 @@ public static class CustomDictionary
     /// <item>Value: words starting with that letter.</item>
     /// </list>
     /// </summary>
-    private static readonly SortedDictionary<char, string[]> _wordsByLetter = new();
+    private static readonly SortedDictionary<char, string[]> _wordsByLetter = [];
 
     /// <summary>
     /// Distribution of the number of words by length.
@@ -33,7 +33,7 @@ public static class CustomDictionary
     /// <item>Value: number of words of that length.</item>
     /// </list>
     /// </summary>
-    private static readonly SortedDictionary<int, int> _wordCountByLength = new();
+    private static readonly SortedDictionary<int, int> _wordCountByLength = [];
 
     /// <summary>
     /// Distribution of the number of words by initial letter.
@@ -42,7 +42,7 @@ public static class CustomDictionary
     /// <item>Value: number of words starting with that letter.</item>
     /// </list>
     /// </summary>
-    private static readonly SortedDictionary<char, int> _wordCountByLetter = new();
+    private static readonly SortedDictionary<char, int> _wordCountByLetter = [];
 
     #endregion Fields
 
@@ -80,11 +80,13 @@ public static class CustomDictionary
     /// </summary>
     /// <param name="tempWordsByLength">Temporary dictionary of words by length.</param>
     /// <param name="tempWordsByLetter">Temporary dictionary of words by initial letter.</param>
-    private static void LoadWordsFromFile(SortedDictionary<int, List<string>> tempWordsByLength,
-                                          SortedDictionary<char, List<string>> tempWordsByLetter)
+    private static void LoadWordsFromFile(
+        SortedDictionary<int, List<string>> tempWordsByLength,
+        SortedDictionary<char, List<string>> tempWordsByLetter
+    )
     {
         StreamReader? sReader = null;
-        string file = "data/PossibleWords_" + Language.LanguageCode + ".txt";
+        string file = $"data/PossibleWords_{Language.LanguageCode}.txt";
 
         try
         {
@@ -102,7 +104,7 @@ public static class CustomDictionary
         }
         catch (FileNotFoundException e)
         {
-            Console.WriteLine("The file was not found: " + file);
+            Console.WriteLine($"The file was not found: {file}");
             Console.WriteLine(e.Message);
         }
         catch (IOException e)
@@ -127,22 +129,24 @@ public static class CustomDictionary
     /// <param name="word">Word to add.</param>
     /// <param name="tempWordsByLength">Temporary dictionary of words by length.</param>
     /// <param name="tempWordsByLetter">Temporary dictionary of words by initial letter.</param>
-    private static void AddWordToStructures(string word,
-                                            SortedDictionary<int, List<string>> tempWordsByLength,
-                                            SortedDictionary<char, List<string>> tempWordsByLetter)
+    private static void AddWordToStructures(
+        string word,
+        SortedDictionary<int, List<string>> tempWordsByLength,
+        SortedDictionary<char, List<string>> tempWordsByLetter
+    )
     {
         int length = word.Length;
         char initial = word[0];
 
         if (!tempWordsByLength.ContainsKey(length))
         {
-            tempWordsByLength[length] = new List<string>();
+            tempWordsByLength[length] = [];
         }
         tempWordsByLength[length].Add(word);
 
         if (!tempWordsByLetter.ContainsKey(initial))
         {
-            tempWordsByLetter[initial] = new List<string>();
+            tempWordsByLetter[initial] = [];
         }
         tempWordsByLetter[initial].Add(word);
 
@@ -162,17 +166,19 @@ public static class CustomDictionary
     /// </summary>
     /// <param name="tempWordsByLength">Temporary dictionary of words by length.</param>
     /// <param name="tempWordsByLetter">Temporary dictionary of words by letter.</param>
-    private static void ConvertListsToArrays(SortedDictionary<int, List<string>> tempWordsByLength,
-                                             SortedDictionary<char, List<string>> tempWordsByLetter)
+    private static void ConvertListsToArrays(
+        SortedDictionary<int, List<string>> tempWordsByLength,
+        SortedDictionary<char, List<string>> tempWordsByLetter
+    )
     {
         foreach (var kvp in tempWordsByLength)
         {
-            _wordsByLength.Add(kvp.Key, kvp.Value.ToArray());
+            _wordsByLength.Add(kvp.Key, [.. kvp.Value]);
         }
 
         foreach (var kvp in tempWordsByLetter)
         {
-            _wordsByLetter.Add(kvp.Key, kvp.Value.ToArray());
+            _wordsByLetter.Add(kvp.Key, [.. kvp.Value]);
         }
     }
 
@@ -203,11 +209,11 @@ public static class CustomDictionary
     /// <returns><c>true</c> if the word is present, otherwise <c>false</c></returns>
     public static bool Contains(string word)
     {
-        if (_wordCountByLength.ContainsKey(word.Length) && _wordCountByLetter.ContainsKey(word[0]))
+        if (
+            _wordCountByLength.TryGetValue(word.Length, out int countByLength)
+            && _wordCountByLetter.TryGetValue(word[0], out int countByLetter)
+        )
         {
-            int countByLength = _wordCountByLength[word.Length];
-            int countByLetter = _wordCountByLetter[word[0]];
-
             if (countByLength <= countByLetter)
             {
                 return BinarySearch(_wordsByLength[word.Length], word, 0, countByLength - 1);
@@ -284,25 +290,18 @@ public static class CustomDictionary
     /// <returns>Index of the new position of the pivot after partitioning.</returns>
     private static int Partition(string[] array, int start, int end, int pivot)
     {
-        string temp = array[pivot];
-        array[pivot] = array[end];
-        array[end] = temp;
-
+        (array[end], array[pivot]) = (array[pivot], array[end]);
         int j = start;
 
         for (int i = start; i < end; i++)
         {
             if (string.Compare(array[i], array[end], StringComparison.Ordinal) <= 0)
             {
-                temp = array[j];
-                array[j] = array[i];
-                array[i] = temp;
+                (array[j], array[i]) = (array[i], array[j]);
                 j++;
             }
         }
-        temp = array[j];
-        array[j] = array[end];
-        array[end] = temp;
+        (array[j], array[end]) = (array[end], array[j]);
 
         return j;
     }

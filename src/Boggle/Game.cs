@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using ConsoleAppVisuals;
-using ConsoleAppVisuals.InteractiveElements;
 using ConsoleAppVisuals.AnimatedElements;
-using ConsoleAppVisuals.PassiveElements;
 using ConsoleAppVisuals.Enums;
+using ConsoleAppVisuals.InteractiveElements;
+using ConsoleAppVisuals.PassiveElements;
 
 namespace Boggle;
 
@@ -17,7 +17,7 @@ public static class Game
     /// <summary>
     /// Stopwatch for a player's turn.
     /// </summary>
-    private static Stopwatch playerStopwatch = new Stopwatch();
+    private static readonly Stopwatch playerStopwatch = new();
 
     /// <summary>
     /// Time for a turn in milliseconds.
@@ -32,7 +32,7 @@ public static class Game
     /// <summary>
     /// List of players.
     /// </summary>
-    private static List<Player> playerList = new List<Player>();
+    private static readonly List<Player> playerList = [];
 
     /// <summary>
     /// Board size.
@@ -42,7 +42,10 @@ public static class Game
     /// <summary>
     /// Text displaying the scores.
     /// </summary>
-    private static EmbedText scoreText = new EmbedText(new List<string> { "Current scores:" }, placement: Placement.TopRight);
+    private static readonly EmbedText scoreText = new(
+        ["Current scores:"],
+        placement: Placement.TopRight
+    );
 
     #endregion Fields
 
@@ -81,15 +84,16 @@ public static class Game
     /// </summary>
     private static void InitializeUI()
     {
+        Console.OutputEncoding = Encoding.UTF8;
         Window.Open();
 
-        Title title = new Title("Boggle");
-        Header header = new Header("By Eliott ROUSSILLE and François TEYNIER",
-                                "POO Project 2024-2025",
-                                "TD E");
-        Footer footer = new Footer("[ESC] Quit",
-                                "[Z | \u2191] Up, [S | \u2193] Down",
-                                "[ENTER] Select");
+        Title title = new("Boggle");
+        Header header = new(
+            "By Eliott ROUSSILLE and François TEYNIER",
+            "POO Project 2024-2025",
+            "TD E"
+        );
+        Footer footer = new("[ESC] Quit", "[\u2191] Up [\u2193] Down", "[ENTER] Select");
 
         Window.AddElement(title, header, footer);
         Window.Render();
@@ -100,10 +104,10 @@ public static class Game
     /// </summary>
     private static void InitializeGame()
     {
-        Text beginText = new Text(new List<string> { "Let the game begin!" });
+        Text beginText = new(["Let the game begin!"]);
         Window.AddElement(beginText);
         Window.Render();
-        System.Threading.Thread.Sleep(1000);
+        Thread.Sleep(1000);
         Window.RemoveElement(beginText);
         Window.Render();
         InitializeLanguage();
@@ -117,25 +121,16 @@ public static class Game
     /// </summary>
     private static void InitializeLanguage()
     {
-        ScrollingMenu languageMenu = new ScrollingMenu(
-            "Choose the game language:",
-            choices: ["French", "English"]
-        );
+        string[] choices = ["French", "English"];
+        ScrollingMenu languageMenu = new("Choose the game language:", choices: choices);
         Window.AddElement(languageMenu);
         Window.ActivateElement(languageMenu);
 
-        var response = languageMenu.GetResponse();
-        switch (response?.Status)
+        var languageResponse = languageMenu.GetResponse();
+        switch (languageResponse?.Status)
         {
             case Status.Selected:
-                if (response?.Value == 0)
-                {
-                    Language.Initialize("FR");
-                }
-                else
-                {
-                    Language.Initialize("EN");
-                }
+                Language.Initialize(choices[languageResponse.Value]);
                 break;
             case Status.Deleted:
                 break;
@@ -148,18 +143,24 @@ public static class Game
     }
 
     /// <summary>
-    /// Prompts the user (via Prompt) to choose the board size and initializes the board.
+    /// Prompts the user (via IntSelector) to choose the board size and initializes the board.
     /// </summary>
     private static void InitializeBoard()
     {
-        IntSelector boardInput = new IntSelector("Enter the size of your board (e.g., 4 for a 4x4):", 4, 9, 4, 1);
+        IntSelector boardInput = new(
+            "Enter the size of your board (e.g., 4 for a 4x4):",
+            4,
+            9,
+            4,
+            1
+        );
         Window.AddElement(boardInput);
         Window.ActivateElement(boardInput);
 
-        var response = boardInput.GetResponse();
-        if (response?.Status == Status.Selected)
+        var boardSizeResponse = boardInput.GetResponse();
+        if (boardSizeResponse?.Status == Status.Selected)
         {
-            boardSize = response.Value;
+            boardSize = boardSizeResponse.Value;
         }
         else
         {
@@ -173,18 +174,18 @@ public static class Game
     }
 
     /// <summary>
-    /// Prompts the user (via Prompt) to set the number of turns and time per turn.
+    /// Prompts the user (via IntSelector) to set the number of turns and time per turn.
     /// </summary>
     private static void InitializeGameParameters()
     {
-        IntSelector turnsInput = new IntSelector("Number of turns per player:", 1, 10, 3, 1);
+        IntSelector turnsInput = new("Number of turns per player:", 1, 10, 3, 1);
         Window.AddElement(turnsInput);
         Window.ActivateElement(turnsInput);
 
-        var response = turnsInput.GetResponse();
-        if (response?.Status == Status.Selected)
+        var turnNumberResponse = turnsInput.GetResponse();
+        if (turnNumberResponse?.Status == Status.Selected)
         {
-            totalTurns = response.Value;
+            totalTurns = turnNumberResponse.Value;
         }
         else
         {
@@ -194,14 +195,14 @@ public static class Game
         Window.RemoveElement(turnsInput);
         Window.Render();
 
-        IntSelector timeInput = new IntSelector("Time per turn in minutes:", 1, 5, 1, 1);
+        IntSelector timeInput = new("Time per turn in minutes:", 1, 5, 1, 1);
         Window.AddElement(timeInput);
         Window.ActivateElement(timeInput);
 
-        response = timeInput.GetResponse();
-        if (response?.Status == Status.Selected)
+        var turnTimeResponse = timeInput.GetResponse();
+        if (turnTimeResponse?.Status == Status.Selected)
         {
-            turnTime = response.Value * 60_000;
+            turnTime = turnTimeResponse.Value * 60_000;
         }
         else
         {
@@ -213,43 +214,39 @@ public static class Game
     }
 
     /// <summary>
-    /// Prompts the user (via Prompt and loop) for the number of players and their names.
+    /// Prompts the user (via IntSelector, Prompt and loop) for the number of players and their names.
     /// </summary>
     private static void InitializePlayers()
     {
-        Prompt playerNumberInput = new Prompt("How many players will participate? (at least 2)");
+        IntSelector playerNumberInput = new("How many players will participate?", 2, 10, 2, 1);
         Window.AddElement(playerNumberInput);
         Window.ActivateElement(playerNumberInput);
 
-        var response = playerNumberInput.GetResponse();
+        var numPlayers = playerNumberInput.GetResponse()?.Value;
 
         Window.RemoveElement(playerNumberInput);
         Window.Render();
-
-        int numPlayers = Convert.ToInt32(response?.Value);
-        if (numPlayers < 2)
-        {
-            numPlayers = 2;
-        }
 
         for (int i = 1; i <= numPlayers; i++)
         {
             while (true)
             {
-                Prompt nameInput = new Prompt($"Enter the name of player {i}:");
+                Prompt nameInput = new($"Enter the name of player {i}:");
                 Window.AddElement(nameInput);
                 Window.ActivateElement(nameInput);
-                response = nameInput.GetResponse();
-                if (response?.Status == Status.Selected)
+                var nameResponse = nameInput.GetResponse();
+                if (nameResponse?.Status == Status.Selected)
                 {
-                    if (Player.TryAddPlayer(response.Value, out string errorMessage))
+                    var player = Player.TryAddPlayer(nameResponse.Value, out string errorMessage);
+
+                    if (player is not null)
                     {
+                        playerList.Add(player);
                         Window.RemoveElement(nameInput);
                         Window.Render();
                         break;
                     }
-
-                    Text errorText = new Text(new List<string> { errorMessage });
+                    Text errorText = new([errorMessage]);
                     Window.AddElement(errorText);
                     Window.Render();
                     Thread.Sleep(1000);
@@ -260,11 +257,11 @@ public static class Game
             }
         }
 
-        List<string> scores = new List<string> { "Current scores:" };
+        List<string> scores = ["Current scores:"];
 
         foreach (var player in playerList)
         {
-            scores.Add("Player " + player.Name + ": " + player.Score + " points");
+            scores.Add($"Player {player.Name}: {player.Score} points");
         }
 
         scoreText.UpdateLines(scores);
@@ -281,8 +278,11 @@ public static class Game
     /// </summary>
     private static void DisplayInstructions()
     {
-        EmbedText instructions = new EmbedText(
-            new List<string> { "In this game, you must find words on the board given at the beginning of each turn.", "Whoever finds the most words, especially the longest and with unusual letters, wins!" }
+        EmbedText instructions = new(
+            [
+                "In this game, you must find words on the board given at the beginning of each turn.",
+                "Whoever finds the most words, especially the longest and with unusual letters, wins!",
+            ]
         );
         Window.AddElement(instructions);
         Window.Render();
@@ -296,11 +296,11 @@ public static class Game
     /// </summary>
     private static void DisplayScores()
     {
-        List<string> scores = new List<string> { "Current scores:" };
+        List<string> scores = ["Current scores:"];
 
         foreach (var player in playerList)
         {
-            scores.Add("Player " + player.Name + ": " + player.Score + " points");
+            scores.Add($"Player {player.Name}: {player.Score} points");
         }
 
         scoreText.UpdateLines(scores);
@@ -312,7 +312,7 @@ public static class Game
     /// </summary>
     private static void EndGame()
     {
-        EmbedText endText = new EmbedText(new List<string> { "The game is over, well played!" });
+        EmbedText endText = new(["The game is over, well played!"]);
         Window.AddElement(endText);
         Window.Render();
         DisplayFinalScores();
@@ -327,12 +327,12 @@ public static class Game
     {
         Window.RemoveElement(scoreText);
 
-        List<string> finalScores = new List<string> { "Final scores:" };
-        int max = Int32.MinValue;
+        List<string> finalScores = ["Final scores:"];
+        int max = int.MinValue;
         string winner = "";
         foreach (var player in playerList)
         {
-            finalScores.Add("Player " + player.Name + ": " + player.Score + " points");
+            finalScores.Add($"Player {player.Name}: {player.Score} points!");
             if (player.Score > max)
             {
                 max = player.Score;
@@ -340,8 +340,9 @@ public static class Game
             }
         }
 
-        finalScores.Add("Congratulations to the winner: " + winner + " with " + max + " points!");
-        EmbedText finalScoreText = new EmbedText(finalScores);
+        finalScores.Add($"Congratulations to the winner: {winner} with {max} points!");
+        finalScores.Add("Thanks for playing!");
+        EmbedText finalScoreText = new(finalScores);
         Window.AddElement(finalScoreText);
         Window.Render();
     }
@@ -351,14 +352,14 @@ public static class Game
     /// </summary>
     private static void DisplayWordCloud()
     {
-        List<string> wordCloudsText = new List<string>();
-        foreach (Player player in playerList)
+        List<string> wordCloudsText = [];
+        foreach (var player in playerList)
         {
             WordCloud.GenerateWordCloud(player.FoundWords, player.Name);
-            wordCloudsText.Add(player.Name + ": Word cloud downloaded!");
+            wordCloudsText.Add($"{player.Name}: Word cloud downloaded!");
         }
 
-        EmbedText wordClouds = new EmbedText(wordCloudsText, placement: Placement.TopRight);
+        EmbedText wordClouds = new(wordCloudsText, placement: Placement.TopRight);
         Window.AddElement(wordClouds);
         Window.Render();
     }
@@ -368,7 +369,11 @@ public static class Game
     /// </summary>
     private static void WaitBeforeClose()
     {
-        FakeLoadingBar fakeLoadingBar = new FakeLoadingBar("Closing the game...", processDuration: 20000, additionalDuration: 10000);
+        FakeLoadingBar fakeLoadingBar = new(
+            "Closing the game...",
+            processDuration: 15000,
+            additionalDuration: 5000
+        );
         Window.AddElement(fakeLoadingBar);
         Window.ActivateElement(fakeLoadingBar);
     }
@@ -382,7 +387,11 @@ public static class Game
     /// </summary>
     private static void GameLoop()
     {
-        FakeLoadingBar fakeLoadingBar = new FakeLoadingBar("Game start!", processDuration: 2000, additionalDuration: 1000);
+        FakeLoadingBar fakeLoadingBar = new(
+            "Game start!",
+            processDuration: 2000,
+            additionalDuration: 1000
+        );
         Window.AddElement(fakeLoadingBar);
         Window.ActivateElement(fakeLoadingBar);
         for (int t = 0; t < totalTurns; t++)
@@ -400,22 +409,21 @@ public static class Game
     /// <param name="player">Player whose turn it is.</param>
     private static void PlayerLoop(Player player)
     {
-        EmbedText playerTurn = new EmbedText(new List<string> { "It's " + player.Name + "'s turn!" });
+        EmbedText playerTurn = new([$"It's {player.Name}'s turn!"]);
         Window.AddElement(playerTurn);
         Window.Render();
 
         Board.Launch();
 
-        Matrix<char> board = new Matrix<char>(Board.ToCharList(), Placement.TopCenter);
+        Matrix<char> board = new(Board.ToCharList(), Placement.TopCenter);
         Window.AddElement(board);
         Window.Render();
 
         playerStopwatch.Restart();
 
-        string message;
         while (IsTimeInTurnInterval(playerStopwatch.ElapsedMilliseconds))
         {
-            Prompt wordInput = new Prompt("Find a word:");
+            Prompt wordInput = new("Find a word:");
             Window.AddElement(wordInput);
             Window.ActivateElement(wordInput);
             var testWord = wordInput.GetResponse();
@@ -429,16 +437,19 @@ public static class Game
                     break;
                 }
 
-                if (Board.TestWord(testWord.Value, out message) && IsTimeInTurnInterval(playerStopwatch.ElapsedMilliseconds))
+                if (
+                    Board.TestWord(testWord.Value, out string message)
+                    && IsTimeInTurnInterval(playerStopwatch.ElapsedMilliseconds)
+                )
                 {
                     player.AddWord(testWord.Value);
                     DisplayScores();
                 }
 
-                Text wordMessage = new Text(new List<string> { message });
+                Text wordMessage = new([message]);
                 Window.AddElement(wordMessage);
                 Window.Render();
-                System.Threading.Thread.Sleep(500);
+                Thread.Sleep(500);
                 Window.RemoveElement(wordMessage);
                 Window.Render();
             }
@@ -450,11 +461,11 @@ public static class Game
         Window.RemoveElement(playerTurn);
         Window.Render();
 
-        EmbedText playerTurnEnd = new EmbedText(new List<string> { "Time's up! End of " + player.Name + "'s turn!" });
+        EmbedText playerTurnEnd = new([$"Time's up! End of {player.Name}'s turn!"]);
         Window.AddElement(playerTurnEnd);
         Window.Render();
 
-        FakeLoadingBar fakeLoadingBar = new FakeLoadingBar(processDuration: 2000, additionalDuration: 1000);
+        FakeLoadingBar fakeLoadingBar = new(processDuration: 2000, additionalDuration: 1000);
         Window.AddElement(fakeLoadingBar);
         Window.ActivateElement(fakeLoadingBar);
 

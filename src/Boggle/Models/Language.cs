@@ -5,10 +5,10 @@ namespace Boggle.Models;
 /// </summary>
 public static class Language
 {
-    private static List<string[]> LANGUAGES = new()
+    private static readonly List<string[]> LANGUAGES = new()
     {
         { ["french", "français", "francais", "fr"] },
-        { ["english", "anglais", "en", "an"] }
+        { ["english", "anglais", "en", "an"] },
     };
 
     #region Fields
@@ -21,17 +21,17 @@ public static class Language
     /// <summary>
     /// Sorted list of letters, their associated points, and their probabilities.
     /// </summary>
-    private static SortedList<char, int> _pointsPerLetter = new();
+    private static readonly SortedList<char, int> _pointsPerLetter = [];
 
     /// <summary>
     /// Sorted list of letters and their maximum occurrences.
     /// </summary>
-    private static SortedList<char, int> _maxOccurrencesPerLetter = new();
+    private static readonly SortedList<char, int> _maxOccurrencesPerLetter = [];
 
     /// <summary>
     /// Array of letters, each appearing as many times as their probability.
     /// </summary>
-    private static char[] _letterProbabilities = new char[100];
+    private static readonly char[] _letterProbabilities = new char[100];
 
     #endregion Fields
 
@@ -48,10 +48,9 @@ public static class Language
     /// <summary>
     /// Gets or sets the list of maximum occurrences per letter.
     /// </summary>
-    public static SortedList<char, int> MaxOccurrences
+    public static SortedList<char, int> MaxOccurrencesPerLetter
     {
         get { return _maxOccurrencesPerLetter; }
-        set { _maxOccurrencesPerLetter = value; }
     }
 
     /// <summary>
@@ -111,7 +110,7 @@ public static class Language
         }
         if (_languageCode == null)
         {
-            throw new ArgumentException("Language " + language + " not recognized. (fr, en)", language);
+            throw new ArgumentException($"Language {language} not recognized. (fr, en)", language);
         }
     }
 
@@ -122,7 +121,7 @@ public static class Language
     {
         try
         {
-            string[] file = File.ReadAllLines("data/Letters_" + _languageCode + ".txt");
+            string[] file = File.ReadAllLines($"data/Letters_{_languageCode}.txt");
 
             int index = 0;
 

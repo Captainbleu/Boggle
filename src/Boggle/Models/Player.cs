@@ -24,7 +24,7 @@ public class Player
     /// <item>Value: the number of occurrences of the word.</item>
     /// </list>
     /// </summary>
-    private Dictionary<string, int> _foundWords;
+    private readonly Dictionary<string, int> _foundWords;
 
     #endregion Fields
 
@@ -41,7 +41,7 @@ public class Player
     {
         _name = name;
         _score = 0;
-        _foundWords = new Dictionary<string, int>();
+        _foundWords = [];
     }
 
     /// <summary>
@@ -49,33 +49,31 @@ public class Player
     /// </summary>
     /// <param name="name">The name of the player to add.</param>
     /// <param name="errorMessage">An error message if the player could not be added.</param>
-    /// <returns><c>true</c> if the player was added successfully; otherwise, <c>false</c>.</returns>
-    public static bool TryAddPlayer(string name, out string errorMessage)
+    /// <returns>The created player object if the addition was successful; otherwise, <c>null</c>.</returns>
+    public static Player? TryAddPlayer(string name, out string errorMessage)
     {
         errorMessage = string.Empty;
 
         if (string.IsNullOrWhiteSpace(name))
         {
-            errorMessage = "The player's name cannot be empty or null. (" + name + ")";
-            return false;
+            errorMessage = $"The player's name cannot be empty or null. ({name})";
+            return null;
         }
 
         string cleanedName = name.Trim(" ;§%*µ$£^¨`@=+".ToCharArray()).ToUpper();
         if (string.IsNullOrWhiteSpace(cleanedName))
         {
-            errorMessage = "The player's name cannot be empty or null. (" + name + ")";
-            return false;
+            errorMessage = $"The player's name cannot be empty or null. ({name})";
+            return null;
         }
 
         if (DoesPlayerNameExist(cleanedName))
         {
-            errorMessage = "The player's name must be unique. (" + name + ")";
-            return false;
+            errorMessage = $"The player's name must be unique. ({name})";
+            return null;
         }
 
-        Game.PlayerList.Add(new Player(cleanedName));
-
-        return true;
+        return new(cleanedName);
     }
 
     #endregion Constructors
@@ -150,7 +148,7 @@ public class Player
     /// <returns>Description of the player by their name, score, and number of words found.</returns>
     public override string ToString()
     {
-        return "Player: " + _name + ", Score: " + _score + ", Number of words found: " + _foundWords.Count + ".";
+        return $"Player: {_name}, Score: {_score}, Number of words found: {_foundWords.Count}.";
     }
 
     /// <summary>

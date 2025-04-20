@@ -22,14 +22,19 @@ public static class WordCloud
     {
         double divisor = 1.1;
 
-        IEnumerable<WordCloudEntry> wordEntries = words.SelectMany(p => Enumerable.Repeat(new WordCloudEntry(p.Key, (int)Math.Ceiling((double)p.Value / divisor)), p.Value));
+        IEnumerable<WordCloudEntry> wordEntries = words.SelectMany(p =>
+            Enumerable.Repeat(
+                new WordCloudEntry(p.Key, (int)Math.Ceiling(p.Value / divisor)),
+                p.Value
+            )
+        );
 
         var wordCloud = new WordCloudInput(wordEntries)
         {
             Width = 1024,
             Height = 720,
             MinFontSize = 12,
-            MaxFontSize = 32
+            MaxFontSize = 32,
         };
 
         var sizer = new LogSizer(wordCloud);
@@ -48,7 +53,7 @@ public static class WordCloud
         canvas.DrawBitmap(bitmap, 0, 0);
 
         using var data = final.Encode(SKEncodedImageFormat.Png, 100);
-        using var writer = File.Create("word_cloud_" + name + ".png");
+        using var writer = File.Create($"word_cloud_{name}.png");
         data.SaveTo(writer);
     }
 }

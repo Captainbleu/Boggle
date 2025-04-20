@@ -7,9 +7,20 @@ public static class Board
 {
     #region Fields
 
+    /// <summary>
+    /// Random number generator for generating die faces.
+    /// </summary>
     private static readonly Random r = new();
-    private static Die[,] _board;
-    private static readonly List<string> _foundWords = new();
+
+    /// <summary>
+    /// Matrix of dice representing the game board.
+    /// </summary>
+    private static Die[,] _board = new Die[0, 0];
+
+    /// <summary>
+    /// List of words found on the board.
+    /// </summary>
+    private static readonly List<string> _foundWords = [];
 
     #endregion Fields
 
@@ -50,13 +61,13 @@ public static class Board
     /// <param name="size">Size of the board</param>
     private static void UpdateMaxOccurrences(int size)
     {
-        double ratio = (double)(size * size) / 16.0;
+        double ratio = size * size / 16.0;
 
         for (int i = 0; i < size; i++)
         {
-            char key = Language.MaxOccurrences.GetKeyAtIndex(i);
-            double value = Math.Ceiling(Language.MaxOccurrences[key] * ratio);
-            Language.MaxOccurrences[key] = (int)value;
+            char key = Language.MaxOccurrencesPerLetter.GetKeyAtIndex(i);
+            double value = Math.Ceiling(Language.MaxOccurrencesPerLetter[key] * ratio);
+            Language.MaxOccurrencesPerLetter[key] = (int)value;
         }
     }
 
@@ -71,7 +82,7 @@ public static class Board
     /// <exception cref="Exception">If the board cannot be generated after many attempts.</exception>
     public static void Launch()
     {
-        var occurrenceCounter = new SortedList<char, int>(Language.MaxOccurrences);
+        var occurrenceCounter = new SortedList<char, int>(Language.MaxOccurrencesPerLetter);
         FillBoardWithConstraints(occurrenceCounter);
         _foundWords.Clear();
     }
@@ -99,7 +110,11 @@ public static class Board
     /// <param name="x">X coordinate in the board.</param>
     /// <param name="y">Y coordinate in the board.</param>
     /// <param name="occurrenceCounter">Remaining occurrences for each letter.</param>
-    private static void GenerateValidFaceForCell(int x, int y, SortedList<char, int> occurrenceCounter)
+    private static void GenerateValidFaceForCell(
+        int x,
+        int y,
+        SortedList<char, int> occurrenceCounter
+    )
     {
         int errorCount = 0;
         int maxAttempts = 30;
@@ -124,7 +139,6 @@ public static class Board
             {
                 throw new Exception("Board cannot be generated");
             }
-
         } while (true);
     }
 
@@ -288,12 +302,26 @@ public static class Board
     /// <summary>
     /// Checks if the next letter of the word can be found in the neighboring cell.
     /// </summary>
-    private static bool DoesNextLetterMatch(string word, int index, int x, int y, int dx, int dy, bool[,] visited)
+    private static bool DoesNextLetterMatch(
+        string word,
+        int index,
+        int x,
+        int y,
+        int dx,
+        int dy,
+        bool[,] visited
+    )
     {
         int nx = x + dx;
         int ny = y + dy;
 
-        if ((dx != 0 || dy != 0) && AreCoordinatesValid(nx, ny) && !visited[nx, ny] && _board[nx, ny].VisibleFace == word[index] && SearchWord(word, index + 1, nx, ny, visited))
+        if (
+            (dx != 0 || dy != 0)
+            && AreCoordinatesValid(nx, ny)
+            && !visited[nx, ny]
+            && _board[nx, ny].VisibleFace == word[index]
+            && SearchWord(word, index + 1, nx, ny, visited)
+        )
         {
             return true;
         }
@@ -315,38 +343,17 @@ public static class Board
     #region Display
 
     /// <summary>
-    /// Returns the visible faces of the board as a string.
-    /// </summary>
-    /// <returns>string of the visible faces of the board</returns>
-    public static string toString()
-    {
-        StringBuilder bld = new();
-        int size = _board.GetLength(0);
-
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                bld.Append(_board[i, j].VisibleFace).Append(' ');
-            }
-            bld.Append('\n');
-        }
-
-        return bld.ToString().TrimEnd();
-    }
-
-    /// <summary>
     /// Returns the visible faces of the board as a list of lists of characters.
     /// </summary>
     /// <returns>list of lists of the visible faces of the board</returns>
     public static List<List<char>> ToCharList()
     {
         int size = _board.GetLength(0);
-        List<List<char>> list = new();
+        List<List<char>> list = [];
 
         for (int i = 0; i < size; i++)
         {
-            List<char> row = new();
+            List<char> row = [];
             for (int j = 0; j < size; j++)
             {
                 row.Add(_board[i, j].VisibleFace);
