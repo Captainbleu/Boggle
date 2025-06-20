@@ -19,19 +19,19 @@ Boggle is a word game where players try to find as many words as possible from a
 
 1. Clone the repository:
 
-    ```sh
+    ```bash
     git clone https://github.com/Captainbleu/Boggle.git
     ```
 
 2. Navigate to the project directory:
 
-    ```sh
+    ```bash
     cd Boggle
     ```
 
 3. Build the project:
 
-    ```sh
+    ```bash
     dotnet build
     ```
 
@@ -39,7 +39,7 @@ Boggle is a word game where players try to find as many words as possible from a
 
 To start the game, run:
 
-```sh
+```bash
 dotnet run
 ```
 
